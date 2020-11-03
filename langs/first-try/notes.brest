@@ -1,0 +1,6 @@
+sum = fnc a, b: a + b
+
+line1 = input("Write number 1");
+line2 = input("Write number 2");
+
+summa = sum(line1, line2);
