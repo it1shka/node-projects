@@ -32,7 +32,7 @@ function InputStream(input){
     }
 
     function croak(message){
-        throw new Error(`${message}: at line ${line}, at column ${column}`);
+        throw `${message}: линия ${line}, позиция ${column}`;
     }
 
 }
@@ -40,26 +40,25 @@ function InputStream(input){
 function TokenStream(input){
     const 
         KEYWORDS  = [
-            'break',
-            'continue',
-            'else',
-            'loop',
-            'if',
-            'fnc',
-            'return',
-            'obj',
+            'выйти',
+            'продолжить',
+            'иначе',
+            'цикл',
+            'если',
+            'функция',
+            'вернуть',
         ],
         OPERATORS = [
-            '=',
-            '+',
-            '-',
+            '=', 
+            '+', 
+            '-', 
             '*',
             '/',
-            '%',
-            '**',
+            '%', 
+            '**', 
             '==',
             '!=',
-            '>',
+            '>', 
             '<',
             '>=',
             '<=',
@@ -97,7 +96,7 @@ function TokenStream(input){
     }
 
     function isIdStart(ch){
-        return /[_a-zA-Z]/.test(ch);
+        return /[_а-яА-Я]/.test(ch);
     }
 
     function isId(ch){
@@ -121,7 +120,7 @@ function TokenStream(input){
         if(OPERATORS.includes(op))
             return {type: 'op', value: op};
         else
-            input.croak(`Unknown operator "${op}"`);
+            input.croak(`Неизвестный оператор "${op}"`);
     }
 
     function readWhile(predicate){
@@ -192,7 +191,7 @@ function TokenStream(input){
         if  (isIdStart(ch))   return readId();
         if  (isPunc(ch))      return {type: 'punc', value: input.next()};
         if  (isOp(ch))        return readOp();
-        input.croak(`Unexpected char "${ch}"`);
+        input.croak(`Неизвестный символ "${ch}"`);
     }
 
     function next(){

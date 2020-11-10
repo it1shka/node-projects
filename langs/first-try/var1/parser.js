@@ -1,5 +1,3 @@
-const { isBuffer } = require("util");
-
 function Parser(input){
     const PRECEDENCE = {
         "=": 1,
@@ -10,6 +8,8 @@ function Parser(input){
         "*": 20, "/": 20, "%": 20,
         "**": 30,
     };
+
+    return parseTopLevel();
 
     function parseExpression(){
         
