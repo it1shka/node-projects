@@ -34,7 +34,8 @@ function ast(tokens){
     ;
 
     function err(msg){
-        throw `Unexpected "${msg}" while parsing!`;
+        msg = msg || 'EOF';
+        throw `Unexpected node "${JSON.stringify(msg) }" while parsing!`;
     }
 
     function next(){
@@ -42,6 +43,24 @@ function ast(tokens){
         if(token === '(')
             return {type: 'in-brackets', body: recursive(undefined, ')')};
         else return token;
+    }
+
+    function merge(nodeA, nodeB){
+        const 
+            precA = ops[nodeA.type] || Infinity,
+            precB = ops[nodeB.type] || Infinity
+        ;
+
+        let merged;
+
+        if(precA >= precB){
+
+        }
+        else{
+
+        }
+
+        return merged;
     }
 
     function recursive(prev, stop){
@@ -65,9 +84,10 @@ function ast(tokens){
         if(!prev)
             return cur;
         
+        
         const
-            myPrec = ops[cur.type] || Infinity,
-            hisPrec = ops[prev.type]
+            myPrec = ops[cur.type]   || Infinity,
+            hisPrec = ops[prev.type] || Infinity
         ;
 
         const final = (hisPrec >= myPrec)
@@ -86,6 +106,7 @@ function ast(tokens){
             right: cur
         }
         ;
+        
         return final;
     }
 
