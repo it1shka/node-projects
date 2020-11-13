@@ -12,7 +12,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\calc2.js",
+            "program": "${workspaceFolder}\\calcast.js",
             "console": "externalTerminal"
         }
     ]
