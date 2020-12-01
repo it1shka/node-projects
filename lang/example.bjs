@@ -1,0 +1,9 @@
+a := 5;
+b := 6;
+
+while a > 1 and b < 100 do
+beg
+    a := a + 1;
+    b := b + 11;
+    if a + b = 12 do a := a + 5;
+end
