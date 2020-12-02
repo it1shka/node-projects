@@ -34,11 +34,7 @@ class Wrapped {
 }
 
 const custom = new Wrapped({
-    ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
-    comment: { match: /\$[^\n]*/, lineBreaks: true },
-    int: /\d+/,
-    float: /\d+\.\d+/,
-    ident: /[_a-zA-Z][_a-zA-Z0-9]*/,
+    'pass': 'pass',
     'beg': 'beg',
     'end': 'end',
     'while': 'end',
@@ -48,7 +44,7 @@ const custom = new Wrapped({
     'true': 'true',
     'false': 'false',
     '(': '(',
-    ')': '_',
+    ')': ')',
     ';': ';',
     //operators
     '+':'+',
@@ -57,14 +53,20 @@ const custom = new Wrapped({
     '/':'/',
     '%':'%',
     ':=':':=',
-    '=':'=',
     '<>':'<>',
     '>':'>',
     '<':'<',
     '>=':'>=',
     '<=':'<=',
     'and':'and',
-    'or':'or'
+    'or':'or',
+    '=':'=',
+
+    ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
+    comment: { match: /\$[^\n]*/, lineBreaks: true },
+    float: /\d+\.\d+/,
+    int: /\d+/,
+    ident: /[_a-zA-Z][_a-zA-Z0-9]*/,
 });
 
 function bin([left, type, right]){
@@ -84,8 +86,9 @@ stmt ->
     "beg" prog "end" {% ([, prog, ]) => (prog) %}
     | ident ":=" expr ";" {% bin %}
     | "while" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'while', cond: expr, body: stmt}) %}
-    | "if" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'if', cond: expr, body1: stmt}) %}
     | "if" expr "do" stmt "else" stmt {% ([, expr, , stmt1, , stmt2]) => ({node: 'if', cond: expr, body1: stmt1, body2: stmt2})%}
+    | "if" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'if', cond: expr, body1: stmt}) %}
+    | "pass" {% () => ([]) %}
 
 expr -> 
     expr1 {% id %}
@@ -124,12 +127,15 @@ expr6 ->
 expr7 -> primary {% id %}
 
 primary -> ident {% id %}
-    | integer {% ([integer]) => ({node: 'num', val: parseInt(integer)}) %}
-    | floating {% ([floating]) => ({node: 'num', val: parseFloat(floating)}) %}
+    | num {% id %}
     | "true" {% () => ({node: 'bool', val: true}) %}
     | "false" {% () => ({node: 'bool', val: false}) %}
+    | "(" expr1 ")" {% ([, expr, ]) => (expr) %}
+
+num -> floating {% ([floating]) => ({node: 'num', val: parseFloat(floating)}) %}
+    | integer {% ([integer]) => ({node: 'num', val: parseInt(integer)}) %}
 
 #atoms
 ident -> %ident {% ([ident]) => ({node: 'var', id: ident.value}) %}
 integer -> %int {%([num]) => (num.value)%}
-floating -> %float {%([num]) => (num.value)%}
+floating -> %float {% ([num]) => (num.value) %}

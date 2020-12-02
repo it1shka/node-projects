@@ -1,4 +1,4 @@
-// Generated automatically by nearley, version 2.19.7
+// Generated automatically by nearley, version 2.19.8
 // http://github.com/Hardmath123/nearley
 (function () {
 function id(x) { return x[0]; }
@@ -37,11 +37,7 @@ class Wrapped {
 }
 
 const custom = new Wrapped({
-    ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
-    comment: { match: /\$[^\n]*/, lineBreaks: true },
-    int: /\d+/,
-    float: /\d+\.\d+/,
-    ident: /[_a-zA-Z][_a-zA-Z0-9]*/,
+    'pass': 'pass',
     'beg': 'beg',
     'end': 'end',
     'while': 'end',
@@ -51,7 +47,7 @@ const custom = new Wrapped({
     'true': 'true',
     'false': 'false',
     '(': '(',
-    ')': '_',
+    ')': ')',
     ';': ';',
     //operators
     '+':'+',
@@ -60,14 +56,20 @@ const custom = new Wrapped({
     '/':'/',
     '%':'%',
     ':=':':=',
-    '=':'=',
     '<>':'<>',
     '>':'>',
     '<':'<',
     '>=':'>=',
     '<=':'<=',
     'and':'and',
-    'or':'or'
+    'or':'or',
+    '=':'=',
+
+    ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
+    comment: { match: /\$[^\n]*/, lineBreaks: true },
+    float: /\d+\.\d+/,
+    int: /\d+/,
+    ident: /[_a-zA-Z][_a-zA-Z0-9]*/,
 });
 
 function bin([left, type, right]){
@@ -86,8 +88,9 @@ var grammar = {
     {"name": "stmt", "symbols": [{"literal":"beg"}, "prog", {"literal":"end"}], "postprocess": ([, prog, ]) => (prog)},
     {"name": "stmt", "symbols": ["ident", {"literal":":="}, "expr", {"literal":";"}], "postprocess": bin},
     {"name": "stmt", "symbols": [{"literal":"while"}, "expr", {"literal":"do"}, "stmt"], "postprocess": ([, expr, , stmt]) => ({node: 'while', cond: expr, body: stmt})},
-    {"name": "stmt", "symbols": [{"literal":"if"}, "expr", {"literal":"do"}, "stmt"], "postprocess": ([, expr, , stmt]) => ({node: 'if', cond: expr, body1: stmt})},
     {"name": "stmt", "symbols": [{"literal":"if"}, "expr", {"literal":"do"}, "stmt", {"literal":"else"}, "stmt"], "postprocess": ([, expr, , stmt1, , stmt2]) => ({node: 'if', cond: expr, body1: stmt1, body2: stmt2})},
+    {"name": "stmt", "symbols": [{"literal":"if"}, "expr", {"literal":"do"}, "stmt"], "postprocess": ([, expr, , stmt]) => ({node: 'if', cond: expr, body1: stmt})},
+    {"name": "stmt", "symbols": [{"literal":"pass"}], "postprocess": () => ([])},
     {"name": "expr", "symbols": ["expr1"], "postprocess": id},
     {"name": "expr1", "symbols": ["expr1", {"literal":"or"}, "expr2"], "postprocess": bin},
     {"name": "expr1", "symbols": ["expr2"], "postprocess": id},
@@ -110,10 +113,12 @@ var grammar = {
     {"name": "expr6", "symbols": ["expr7"], "postprocess": id},
     {"name": "expr7", "symbols": ["primary"], "postprocess": id},
     {"name": "primary", "symbols": ["ident"], "postprocess": id},
-    {"name": "primary", "symbols": ["integer"], "postprocess": ([integer]) => ({node: 'num', val: parseInt(integer)})},
-    {"name": "primary", "symbols": ["floating"], "postprocess": ([floating]) => ({node: 'num', val: parseFloat(floating)})},
+    {"name": "primary", "symbols": ["num"], "postprocess": id},
     {"name": "primary", "symbols": [{"literal":"true"}], "postprocess": () => ({node: 'bool', val: true})},
     {"name": "primary", "symbols": [{"literal":"false"}], "postprocess": () => ({node: 'bool', val: false})},
+    {"name": "primary", "symbols": [{"literal":"("}, "expr1", {"literal":")"}], "postprocess": ([, expr, ]) => (expr)},
+    {"name": "num", "symbols": ["floating"], "postprocess": ([floating]) => ({node: 'num', val: parseFloat(floating)})},
+    {"name": "num", "symbols": ["integer"], "postprocess": ([integer]) => ({node: 'num', val: parseInt(integer)})},
     {"name": "ident", "symbols": [(custom.has("ident") ? {type: "ident"} : ident)], "postprocess": ([ident]) => ({node: 'var', id: ident.value})},
     {"name": "integer", "symbols": [(custom.has("int") ? {type: "int"} : int)], "postprocess": ([num]) => (num.value)},
     {"name": "floating", "symbols": [(custom.has("float") ? {type: "float"} : float)], "postprocess": ([num]) => (num.value)}
