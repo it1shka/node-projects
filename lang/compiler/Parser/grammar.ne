@@ -43,6 +43,11 @@ const custom = new Wrapped({
     'else': 'else',
     'true': 'true',
     'false': 'false',
+    //f_decl sect
+    'fun': 'fun',
+    ':' : ':',
+    '->' : '->',
+    //
     '(': '(',
     ')': ')',
     ';': ';',
@@ -76,6 +81,16 @@ function bin([left, type, right]){
         rhs: right
     };
 }
+
+function func_decl([, ident, , args, , stmt]){
+    return {
+        node: 'func_decl',
+        name: ident.id,
+        args: args, 
+        body: stmt
+    };
+}
+
 %}
 @lexer custom
 
@@ -88,7 +103,17 @@ stmt ->
     | "while" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'while', cond: expr, body: stmt}) %}
     | "if" expr "do" stmt "else" stmt {% ([, expr, , stmt1, , stmt2]) => ({node: 'if', cond: expr, body1: stmt1, body2: stmt2})%}
     | "if" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'if', cond: expr, body1: stmt}) %}
+    | func_decl {% id %}
     | "pass" {% () => ([]) %}
+
+#Ебну палкой блять
+func_decl -> "fun" ident ":" args_decl "->" func_stmt {% func_decl %}
+
+args_decl -> null
+
+func_stmt -> stmt {% id %}
+
+#пиздец
 
 expr -> 
     expr1 {% id %}
