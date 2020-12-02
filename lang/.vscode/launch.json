@@ -11,8 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\Parser\\parser-main.js",
-            "console": "externalTerminal"
+            "program": "${workspaceFolder}/compiler/Parser/parser-main.js",
+            "console": "integratedTerminal"
         }
     ]
 }
