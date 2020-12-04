@@ -44,9 +44,10 @@ const custom = new Wrapped({
     'true': 'true',
     'false': 'false',
     //f_decl sect
-    'fun': 'fun',
-    ':' : ':',
-    '->' : '->',
+
+    //f_call sect
+    "!": "!",
+    ",": ",",
     //
     '(': '(',
     ')': ')',
@@ -82,13 +83,19 @@ function bin([left, type, right]){
     };
 }
 
-function func_decl([, ident, , args, , stmt]){
+function func_call([ident, args]){
     return {
-        node: 'func_decl',
+        node: 'func_call',
         name: ident.id,
-        args: args, 
-        body: stmt
-    };
+        args: args
+    }
+}
+
+function joinRight(a, b){
+    if(b instanceof Array){
+        return [a, ...b];
+    }
+    else return [a, b];
 }
 
 %}
@@ -99,21 +106,12 @@ prog ->
 
 stmt ->
     "beg" prog "end" {% ([, prog, ]) => (prog) %}
+    | func_call ";" {% id %}
     | ident ":=" expr ";" {% bin %}
     | "while" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'while', cond: expr, body: stmt}) %}
     | "if" expr "do" stmt "else" stmt {% ([, expr, , stmt1, , stmt2]) => ({node: 'if', cond: expr, body1: stmt1, body2: stmt2})%}
     | "if" expr "do" stmt {% ([, expr, , stmt]) => ({node: 'if', cond: expr, body1: stmt}) %}
-    | func_decl {% id %}
     | "pass" {% () => ([]) %}
-
-#Ебну палкой блять
-func_decl -> "fun" ident ":" args_decl "->" func_stmt {% func_decl %}
-
-args_decl -> null
-
-func_stmt -> stmt {% id %}
-
-#пиздец
 
 expr -> 
     expr1 {% id %}
@@ -151,11 +149,20 @@ expr6 ->
 
 expr7 -> primary {% id %}
 
-primary -> ident {% id %}
+primary -> func_call {% id %}
+    | ident {% id %}
     | num {% id %}
     | "true" {% () => ({node: 'bool', val: true}) %}
     | "false" {% () => ({node: 'bool', val: false}) %}
     | "(" expr1 ")" {% ([, expr, ]) => (expr) %}
+
+func_call -> ident call_arg_list {% func_call %}
+
+call_arg_list -> "!" {% () => ([]) %}
+    | call_args {% id %}
+
+call_args -> expr "," call_args {% ([expr, , exprs]) => (joinRight(expr, exprs)) %}
+    | expr {% ([expr]) => ([expr]) %}
 
 num -> floating {% ([floating]) => ({node: 'num', val: parseFloat(floating)}) %}
     | integer {% ([integer]) => ({node: 'num', val: parseInt(integer)}) %}
