@@ -6,13 +6,11 @@ module.exports = function(input){
     try{
         parser.feed(input);
         const res = parser.results;
-        if(res === []){
-            throw 'Your program is totally wrong';
-        }
         return res;
     }
     catch(e){
-        const t = e.token;
-        throw `Unexpected token ${t.type ? `${t.value} of type ${t.type}` : `${t.value}`}\n<at line ${t.line}, at column ${t.col}>`;
+        //const t = e.token;
+        //throw `Unexpected token ${t.type ? `${t.value} of type ${t.type}` : `${t.value}`}\n<at line ${t.line}, at column ${t.col}>`;
+        throw e;
     }
 }

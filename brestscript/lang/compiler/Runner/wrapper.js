@@ -1,7 +1,7 @@
 module.exports = function(code){
     try{
     return Function(
-        'shout', 
+        'write', 
     code)(
         console.log
     );

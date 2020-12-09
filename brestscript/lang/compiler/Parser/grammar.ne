@@ -64,16 +64,17 @@ const custom = new Wrapped({
     '%':'%',
     ':=':':=',
     '<>':'<>',
-    '>':'>',
-    '<':'<',
     '>=':'>=',
     '<=':'<=',
+    '>':'>',
+    '<':'<',
     'and':'and',
     'or':'or',
+    '=>':'=>',
     '=':'=',
 
     ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
-    comment: { match: /\$[^\n]*/, lineBreaks: true },
+    comment: { match: /#[^\n]*/, lineBreaks: true },
     float: /\d+\.\d+/,
     int: /\d+/,
     ident: /[_a-zA-Z][_a-zA-Z0-9]*/,
@@ -119,13 +120,14 @@ stmt ->
     "beg" prog "end" {% ([, prog, ]) => (`${prog}`) %}
     | func_decl_stmt {% id %}
     | func_call ";" {% ([call, ]) => (`${call};`) %}
-    | ident ":=" expr ";" {% ([id, , expr, ]) => `${id} = ${expr};` %}
+    | ident ":=" expr ";" {% ([id, , expr, ]) => `${id}=${expr};` %}
     | "while" expr "do" stmt {% ([, expr, , stmt]) => (`while(${expr}){${stmt}}`) %}
     | "if" expr "do" stmt "else" stmt {% ([, expr, , stmt1, , stmt2]) => (`if(${expr}){${stmt1}}else{${stmt2}}`)%}
     | "if" expr "do" stmt {% ([, expr, , stmt]) => (`if(${expr}){${stmt}}`) %}
     | "continue" ";" {% () => ('continue;') %}
     | "break" ";" {% () => ('break;') %}
     | "return" expr ";" {% ([, expr, ]) => (`return ${expr};`) %}
+    | "=>" expr ";" {% ([, expr, ]) => (`return ${expr};`)  %}
     | "pass" {% () => (';') %}
 
 func_decl_stmt -> "fun" ident call_arg_list stmt {% function_ %}
