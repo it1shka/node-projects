@@ -1,4 +1,4 @@
-// Generated automatically by nearley, version 2.19.7
+// Generated automatically by nearley, version 2.19.8
 // http://github.com/Hardmath123/nearley
 (function () {
 function id(x) { return x[0]; }
@@ -79,10 +79,11 @@ const custom = new Wrapped({
     '<':'<',
     'and':'and',
     'or':'or',
+    '=>':'=>',
     '=':'=',
 
     ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
-    comment: { match: /\$[^\n]*/, lineBreaks: true },
+    comment: { match: /#[^\n]*/, lineBreaks: true },
     float: /\d+\.\d+/,
     int: /\d+/,
     ident: /[_a-zA-Z][_a-zA-Z0-9]*/,
@@ -127,13 +128,14 @@ var grammar = {
     {"name": "stmt", "symbols": [{"literal":"beg"}, "prog", {"literal":"end"}], "postprocess": ([, prog, ]) => (`${prog}`)},
     {"name": "stmt", "symbols": ["func_decl_stmt"], "postprocess": id},
     {"name": "stmt", "symbols": ["func_call", {"literal":";"}], "postprocess": ([call, ]) => (`${call};`)},
-    {"name": "stmt", "symbols": ["ident", {"literal":":="}, "expr", {"literal":";"}], "postprocess": ([id, , expr, ]) => `${id} = ${expr};`},
+    {"name": "stmt", "symbols": ["ident", {"literal":":="}, "expr", {"literal":";"}], "postprocess": ([id, , expr, ]) => `${id}=${expr};`},
     {"name": "stmt", "symbols": [{"literal":"while"}, "expr", {"literal":"do"}, "stmt"], "postprocess": ([, expr, , stmt]) => (`while(${expr}){${stmt}}`)},
     {"name": "stmt", "symbols": [{"literal":"if"}, "expr", {"literal":"do"}, "stmt", {"literal":"else"}, "stmt"], "postprocess": ([, expr, , stmt1, , stmt2]) => (`if(${expr}){${stmt1}}else{${stmt2}}`)},
     {"name": "stmt", "symbols": [{"literal":"if"}, "expr", {"literal":"do"}, "stmt"], "postprocess": ([, expr, , stmt]) => (`if(${expr}){${stmt}}`)},
     {"name": "stmt", "symbols": [{"literal":"continue"}, {"literal":";"}], "postprocess": () => ('continue;')},
     {"name": "stmt", "symbols": [{"literal":"break"}, {"literal":";"}], "postprocess": () => ('break;')},
     {"name": "stmt", "symbols": [{"literal":"return"}, "expr", {"literal":";"}], "postprocess": ([, expr, ]) => (`return ${expr};`)},
+    {"name": "stmt", "symbols": [{"literal":"=>"}, "expr", {"literal":";"}], "postprocess": ([, expr, ]) => (`return ${expr};`)},
     {"name": "stmt", "symbols": [{"literal":"pass"}], "postprocess": () => (';')},
     {"name": "func_decl_stmt", "symbols": [{"literal":"fun"}, "ident", "call_arg_list", "stmt"], "postprocess": function_},
     {"name": "expr", "symbols": ["expr1"], "postprocess": id},
