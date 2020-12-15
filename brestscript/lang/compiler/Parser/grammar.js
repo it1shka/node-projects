@@ -3,7 +3,13 @@
 (function () {
 function id(x) { return x[0]; }
 
-const {compile} = require('moo');
+let moo;
+if(typeof require !== 'undefined')
+    moo = require('moo');
+else
+    moo = window.moo;
+
+const {compile} = moo;
 
 class Wrapped {
     constructor(rules){
@@ -67,10 +73,10 @@ const custom = new Wrapped({
     '%':'%',
     ':=':':=',
     '<>':'<>',
-    '>':'>',
-    '<':'<',
     '>=':'>=',
     '<=':'<=',
+    '>':'>',
+    '<':'<',
     'and':'and',
     'or':'or',
     '=':'=',

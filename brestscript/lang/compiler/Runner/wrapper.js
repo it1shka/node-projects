@@ -1,12 +1,16 @@
-module.exports = function(code){
+function Execute(code){
     try{
     return Function(
-        'shout', 
+        'print, getnum', 
     code)(
-        console.log
+        console.log, 
+        window ? str => Number(prompt(str)) : () => undefined,
     );
     }
     catch(e){
         throw 'JS Error: ' + e.message;
     }
 }
+
+if(typeof module !== 'undefined')
+    module.exports = Execute;
