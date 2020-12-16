@@ -1,10 +1,19 @@
 function Execute(code){
+    Array.prototype.get = function(pos){
+        return this[pos-1];
+    }
+    Array.prototype.set = function(pos, val){
+        return (this[pos-1] = val);
+    }
     try{
     return Function(
-        'print, getnum, clr, px, rect', 
+        'array, print, getnum, clr, px, rect', 
     code)(
+        function(...args){
+            return args;
+        },
         console.log, 
-        typeof window !== 'undefined' ? str => Number(prompt(str)) : () => undefined,
+        str => Number(prompt(str)),
         set_color, 
         set_pixel,
         rect
