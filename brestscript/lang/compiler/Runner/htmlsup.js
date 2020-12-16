@@ -12,16 +12,22 @@ codeArea.onkeydown = function(e){
 }
 let runCounter = 0;
 function runCode(){
+    ctx.fillStyle = 'rgb(48, 48, 48)';
+    ctx.fillRect(0,0,canvas.width, canvas.height);
     runCounter++;
     console.log(`ЗАПУСК #${runCounter}`);
     const source = codeArea.value;
     try{
     const jscode = transpilateCode(source);
     console.warn(jscode);
+    if (jscode === ''){
+        console.log('Your program is empty or totally wrong!');
+    }
     Execute(jscode);
     }
     catch(e){
         console.log(e);
+        //throw e;
     }
 }
 

@@ -1,14 +1,18 @@
 function Execute(code){
     try{
     return Function(
-        'print, getnum', 
+        'print, getnum, clr, px, rect', 
     code)(
         console.log, 
-        window ? str => Number(prompt(str)) : () => undefined,
+        typeof window !== 'undefined' ? str => Number(prompt(str)) : () => undefined,
+        set_color, 
+        set_pixel,
+        rect
     );
     }
     catch(e){
-        throw 'JS Error: ' + e.message;
+        throw e;
+        //throw 'JS Error: ' + e.message;
     }
 }
 
