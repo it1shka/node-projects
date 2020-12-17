@@ -79,9 +79,6 @@ const custom = new Wrapped({
     '=>':'=>',
     '=':'=',
 
-    //for OOP
-    ':': ':',
-
     ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
     comment: { match: /#[^\n]*/, lineBreaks: true },
     float: /\d+\.\d+/,
@@ -104,8 +101,7 @@ const transl = {
     '<=':'<=',
     'and':'&&',
     'or':'||',
-    '=':'===',
-    ':': '.'
+    '=':'==='
 }
 
 function bin([left, type, right]){
@@ -129,8 +125,7 @@ prog ->
 stmt ->
     "beg" prog "end" {% ([, prog, ]) => (`${prog}`) %}
     | func_decl_stmt {% id %}
-    #| func_call ";" {% ([call, ]) => (`${call};`) %}
-    | expr ";" {% ([expr, ]) => (`${expr};`)%}
+    | func_call ";" {% ([call, ]) => (`${call};`) %}
     | ident ":=" expr ";" {% ([id, , expr, ]) => `${id}=${expr};` %}
     | "while" expr "do" stmt {% ([, expr, , stmt]) => (`while(${expr}){${stmt}}`) %}
     | "if" expr "do" stmt "else" stmt {% ([, expr, , stmt1, , stmt2]) => (`if(${expr}){${stmt1}}else{${stmt2}}`)%}
@@ -177,12 +172,7 @@ expr6 ->
     | expr6 "%" expr7 {% bin %}
     | expr7 {% id %}
 
-#oop
-expr7 -> 
-    expr7 ":" expr8 {% bin %}
-    | expr8 {% id %}
-
-expr8 -> primary {% id %}
+expr7 -> primary {% id %}
 
 primary -> func_call {% id %}
     | ident {% id %}

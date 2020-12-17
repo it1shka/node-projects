@@ -114,13 +114,125 @@
             <div
             data-scale="3"
             data-x="15000"
+            class="step"
+            data-rotate-z="90"
+            >
+            
+            <h1><span class="red">Как</span> создавался проект?</h1>
+
+            </div>
+
+            <div
+            data-scale="1.5"
+            data-x="17000"
+            class="step"
+            data-rotate-z="90"
+            >
+            
+            <h1><span class="red">Лексер</span></h1>
+            <h2>
+                <span class="light">Программа(текст)</span> 
+            </br> 
+            <span class="rlight">↓</span> 
+            </br>
+                <span class="light">Поток токенов(слов)</span></h2>
+            </div>
+
+            <div
+            data-scale="1"
+            data-x="19000"
+            class="step"
+            data-rotate-z="90"
+            >
+            
+            <h1><span class="red">Пример: </span></h1>
+            <h2>
+                <span class="bl">print "Hello world!";</span>
+                </br> 
+                <span class="rlight">↓</span> 
+                </br>
+                [<span class="light">print</span>, <span class="light">"Hello world!"</span>, <span class="light">;</span>]</h2>
+            </div>
+
+            <div
+            data-scale="1.4"
+            data-x="22000"
+            class="step"
+            data-rotate-z="90"
+            >
+            
+            <h1><span class="red">Что я использовал для лексера?</span></h1>
+            <h2>1)<span class="bl">Регулярные выражения (RegEx)</span></h2>
+            <h2>2)Библиотека<span class="bl"> moo.js</span> (<a href="https://www.npmjs.com/package/moo">https://www.npmjs.com/package/moo</a>)</h2>
+            <img style="margin-left: 10%;" src="https://raw.githubusercontent.com/tjvr/moo/HEAD/cow.png" />
+            
+            </div>
+
+            <div
+            data-scale="1"
+            data-x="24000"
+            class="step"
+            data-rotate-z="0"
+            >
+            
+            <h1><span class="red">Парсер</span></h1>
+            <h2>
+                <span class="light">Поток токенов</span> 
+            </br> 
+            <span class="rlight">↓</span> 
+            </br>
+                <span class="light">Абстрактное синтаксическое дерево</span></h2>
+            </div>
+            
+            <div
+            data-scale="1"
+            data-x="26000"
+            class="step"
+            data-rotate-z="0"
+            >
+            
+            <h1><span class="red">Пример: </span></h1>
+            <h2>
+                [<span class="light">print</span>, <span class="light">"Hello world!"</span>, <span class="light">;</span>]
+                </br> 
+                <span class="rlight">↓</span> 
+                </br>
+                {Тип: <span class="light">Вызов</span>, Имя: <span class="light">print</span>, Аргумент: <span class="light">"Hello world!"</span>}
+            </h2>
+            </div>
+
+            <div
+            data-scale="1.4"
+            data-x="28000"
+            class="step"
+            >
+            
+            <h1><span class="red">Что я использовал для парсера?</span></h1>
+            <h2>1)<span class="bl">Собственная</span> рекурсивная реализация</h2>
+            <h2>2)Библиотека<span class="bl"> Nearley.js</span></h2>
+            <h2>(<a href="https://nearley.js.org/">https://nearley.js.org/</a>)</h2>
+            </div>
+
+            
+            <!--
+            <div
+            data-scale="3"
+            data-x="15000"
             class="step">
             <h2>
                 Язык ЛИС имеет <span class="red">ДВЕ</span> рабочие версии:
-                раннюю <span class="light">lisp-подобную</span> версию на русском языке и
+                раннюю <span class="light">lisp-подобную</span> версию на русском языке
                 и более новую, с синтаксисом, похожим на язык <span class="rlight">Pascal</span>
             </h2>
             </div>
+
+            <div
+            data-scale="4"
+            data-x="15000"
+            class="step">
+            <h1>Давайте посмотрим на различия и новые возможности второй версии</h1>
+            </div>
+            -->
         </div>
 
         <script>

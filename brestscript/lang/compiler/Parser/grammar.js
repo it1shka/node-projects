@@ -1,4 +1,4 @@
-// Generated automatically by nearley, version 2.19.7
+// Generated automatically by nearley, version 2.19.8
 // http://github.com/Hardmath123/nearley
 (function () {
 function id(x) { return x[0]; }
@@ -82,9 +82,6 @@ const custom = new Wrapped({
     '=>':'=>',
     '=':'=',
 
-    //for OOP
-    ':': ':',
-
     ws: { match: /[ \t\r\n\f\v]+/, lineBreaks: true },
     comment: { match: /#[^\n]*/, lineBreaks: true },
     float: /\d+\.\d+/,
@@ -107,8 +104,7 @@ const transl = {
     '<=':'<=',
     'and':'&&',
     'or':'||',
-    '=':'===',
-    ':': '.'
+    '=':'==='
 }
 
 function bin([left, type, right]){
@@ -131,7 +127,7 @@ var grammar = {
     {"name": "prog", "symbols": ["prog$ebnf$1"], "postprocess": ([list]) => (list.join(''))},
     {"name": "stmt", "symbols": [{"literal":"beg"}, "prog", {"literal":"end"}], "postprocess": ([, prog, ]) => (`${prog}`)},
     {"name": "stmt", "symbols": ["func_decl_stmt"], "postprocess": id},
-    {"name": "stmt", "symbols": ["expr", {"literal":";"}], "postprocess": ([expr, ]) => (`${expr};`)},
+    {"name": "stmt", "symbols": ["func_call", {"literal":";"}], "postprocess": ([call, ]) => (`${call};`)},
     {"name": "stmt", "symbols": ["ident", {"literal":":="}, "expr", {"literal":";"}], "postprocess": ([id, , expr, ]) => `${id}=${expr};`},
     {"name": "stmt", "symbols": [{"literal":"while"}, "expr", {"literal":"do"}, "stmt"], "postprocess": ([, expr, , stmt]) => (`while(${expr}){${stmt}}`)},
     {"name": "stmt", "symbols": [{"literal":"if"}, "expr", {"literal":"do"}, "stmt", {"literal":"else"}, "stmt"], "postprocess": ([, expr, , stmt1, , stmt2]) => (`if(${expr}){${stmt1}}else{${stmt2}}`)},
@@ -162,9 +158,7 @@ var grammar = {
     {"name": "expr6", "symbols": ["expr6", {"literal":"/"}, "expr7"], "postprocess": bin},
     {"name": "expr6", "symbols": ["expr6", {"literal":"%"}, "expr7"], "postprocess": bin},
     {"name": "expr6", "symbols": ["expr7"], "postprocess": id},
-    {"name": "expr7", "symbols": ["expr7", {"literal":":"}, "expr8"], "postprocess": bin},
-    {"name": "expr7", "symbols": ["expr8"], "postprocess": id},
-    {"name": "expr8", "symbols": ["primary"], "postprocess": id},
+    {"name": "expr7", "symbols": ["primary"], "postprocess": id},
     {"name": "primary", "symbols": ["func_call"], "postprocess": id},
     {"name": "primary", "symbols": ["ident"], "postprocess": id},
     {"name": "primary", "symbols": ["num"], "postprocess": id},
